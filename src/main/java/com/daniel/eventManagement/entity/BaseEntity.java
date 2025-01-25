@@ -1,15 +1,20 @@
 package com.daniel.eventManagement.entity;
 
-import lombok.Getter;
+import jakarta.persistence.MappedSuperclass;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-public class BaseEntity {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@MappedSuperclass
+@Data
+public abstract class BaseEntity {
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 }
