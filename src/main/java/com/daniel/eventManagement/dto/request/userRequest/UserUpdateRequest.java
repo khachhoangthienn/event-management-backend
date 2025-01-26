@@ -17,4 +17,6 @@ public class UserUpdateRequest {
     String lastName;
     LocalDate birth;
     String bio;
+    boolean gender;
+    String address;
 }

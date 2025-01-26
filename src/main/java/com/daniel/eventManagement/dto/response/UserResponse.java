@@ -21,6 +21,8 @@ public class UserResponse extends BaseEntity {
     String lastName;
     LocalDate birth;
     String bio;
+    boolean gender;
+    String address;
     String avatarUrl;
     String role;
 }

@@ -1,6 +1,5 @@
 package com.daniel.eventManagement.dto.request.userRequest;
 
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,5 +19,7 @@ public class UserCreateRequest {
     String lastName;
     LocalDate birth;
     String bio;
+    boolean gender;
+    String address;
     String role;
 }

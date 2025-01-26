@@ -23,6 +23,8 @@ public class User extends BaseEntity {
     String lastName;
     String birth;
     String bio;
+    boolean gender;
+    String address;
     String avatarUrl;
     String role;
 }
