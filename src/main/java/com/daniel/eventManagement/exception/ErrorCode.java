@@ -16,6 +16,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
     ENDPOINT_NOT_FOUND(404, "Not found: Endpoint was not found", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND(404, "Not found: User was not found", HttpStatus.NOT_FOUND),
+    EMAIL_ALREADY_EXISTS(409, "Conflict: Email already exists", HttpStatus.CONFLICT),
     // 4xx Client Errors
     USERNAME_EXISTED(409, "Conflict: Username already exists", HttpStatus.CONFLICT),
     UNAUTHENTICATED(401, "Unauthorized: Authentication is required", HttpStatus.UNAUTHORIZED),

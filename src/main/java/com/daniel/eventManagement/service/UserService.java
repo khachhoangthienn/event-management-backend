@@ -13,8 +13,12 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +29,20 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
-        System.out.println(userCreateRequest.getFirstName());
         User user = userMapper.toUser(userCreateRequest);
         user.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
+        if (!Role.isValidRole(user.getRole())) throw new AppException(ErrorCode.INVALID_ROLE);
+        try {
+            User savedUser = userRepository.save(user);
+            return userMapper.toUserResponse(savedUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+        }
+    }
+
+    public UserResponse updateUser(String userId, UserUpdateRequest userCreateRequest) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        userMapper.updateUser(user, userCreateRequest);
         if (!Role.isValidRole(user.getRole())) throw new AppException(ErrorCode.INVALID_ROLE);
         User savedUser = userRepository.save(user);
         return userMapper.toUserResponse(savedUser);
@@ -39,12 +54,11 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public UserResponse updateUser(String userId, UserUpdateRequest userCreateRequest) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        userMapper.updateUser(user, userCreateRequest);
-        if (!Role.isValidRole(user.getRole())) throw new AppException(ErrorCode.INVALID_ROLE);
-        User savedUser = userRepository.save(user);
-        return userMapper.toUserResponse(savedUser);
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll(Sort.by(Sort.Order.asc("createdAt")));
+        return users.stream().map(userMapper::toUserResponse).toList();
     }
+
+
 
 }
